@@ -200,7 +200,8 @@ and dependencies (minified).
 				/*
 				the tags that disable mouse-wheel when cursor is over them
 				*/
-				disableOver:["select","option","keygen","datalist","textarea"]
+				disableOver:["select","option","keygen","datalist","textarea"],
+				disableOverClass: '',
 			},
 			/* 
 			scrollbar buttons
@@ -1493,6 +1494,13 @@ and dependencies (minified).
 		/* disables mouse-wheel when hovering specific elements like select, datalist etc. */
 		_disableMousewheel=function(el,target){
 			var tag=target.nodeName.toLowerCase(),
+			var disableClass = el.data(pluginPfx).opt.mouseWheel.disableOverClass;
+			
+				// if we have a disableClass, check if the target contains it, otherwise, we still need to scroll, so return true
+				if (disableClass && disableClass.length && target.classList.contains(disableClass)) {
+					return true; // disable if we found the disableClass
+				}
+			
 				tags=el.data(pluginPfx).opt.mouseWheel.disableOver,
 				/* elements that require focus */
 				focusTags=["select","textarea"];
