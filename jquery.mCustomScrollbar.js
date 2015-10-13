@@ -250,7 +250,12 @@ and dependencies (minified).
 				scrolling amount in pixels
 				values: "auto", integer 
 				*/
-				scrollAmount:"auto"
+				scrollAmount:"auto",
+				/*
+				elements to disable keyboard shortcuts over
+				values (array): ["input","textarea","select","datalist","keygen","[contenteditable='true']"]
+				*/
+				disableOver: ["input","textarea","select","datalist","keygen","[contenteditable='true']"],
 			},
 			/*
 			enable content touch-swipe scrolling 
@@ -1649,7 +1654,7 @@ and dependencies (minified).
 				mCustomScrollBox=$("#mCSB_"+d.idx),
 				mCSB_container=$("#mCSB_"+d.idx+"_container"),
 				wrapper=mCSB_container.parent(),
-				editables="input,textarea,select,datalist,keygen,[contenteditable='true']",
+				editables=o.keyboard.disableOver.join(","),
 				iframe=mCSB_container.find("iframe"),
 				events=["blur."+namespace+" keydown."+namespace+" keyup."+namespace];
 			if(iframe.length){
