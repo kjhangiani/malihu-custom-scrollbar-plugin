@@ -1576,11 +1576,29 @@ and dependencies (minified).
 							(contentPos[1]+to[1]>=0 && contentPos[0]+to[1]<wrapper.width()-el.outerWidth(false))
 						],
 						overwrite=(o.axis==="yx" && !isVisible[0] && !isVisible[1]) ? "none" : "all";
-					if(o.axis!=="x" && !isVisible[0]){
-						_scrollTo($this,to[0].toString(),{dir:"y",scrollEasing:"mcsEaseInOut",overwrite:overwrite,dur:dur});
+	
+					if(o.axis!=="x" && !isVisible[0]){						
+						// we actually want to scroll to half the distance, not the actual position
+						// this would more realistically simulate the effect of a real browser
+						// test w/ various window sizes, browser scrolls such that activeElement
+						// is halfway down the page, not at the top of the page
+						// this ensures the user retains context when the page autoscrolls
+						
+						// formula: to[0] - wrapper.height()/2 + el.outerHeight()
+						// if to[0] < 0, to[0] = 0;
+						
+						var to_y = to[0] - (wrapper.height()/2) + el.outerHeight();
+						if (to_y < 0) { to_y = 0; }
+						
+						_scrollTo($this,to_y.toString(),{dir:"y",scrollEasing:"mcsEaseInOut",overwrite:overwrite,dur:dur});
 					}
 					if(o.axis!=="y" && !isVisible[1]){
-						_scrollTo($this,to[1].toString(),{dir:"x",scrollEasing:"mcsEaseInOut",overwrite:overwrite,dur:dur});
+						
+						// scroll so that the focused element is centered
+						var to_x = to[1] - (wrapper.width()/2) + el.outerWidth();
+						if (to_x < 0) { to_x = 0; }
+						
+						_scrollTo($this,to_x.toString(),{dir:"x",scrollEasing:"mcsEaseInOut",overwrite:overwrite,dur:dur});
 					}
 				},$this[0]._focusTimer);
 			});
